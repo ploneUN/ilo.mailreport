@@ -1,0 +1,40 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:plone="http://namespaces.plone.org/plone">
+
+	<!-- TODO: This does not look right, but couldn't get it working otherwise -->
+    <include package="plone.contentrules" file="meta.zcml" />
+              
+    <!-- Email action definition -->
+
+     <adapter factory=".mail.MailActionExecutor" />
+
+     <browser:page
+       for="plone.app.contentrules.browser.interfaces.IRuleActionAdding"
+       name="ilo.mailreport.actions.Mail"
+       class=".mail.MailAddForm"
+       permission="cmf.ManagePortal"
+       />
+
+     <browser:page
+       for="ilo.mailreport.actions.mail.IMailAction"
+       name="edit"
+       class=".mail.MailEditForm"
+       permission="cmf.ManagePortal"
+       />
+
+     <plone:ruleAction
+         name="ilo.mailreport.actions.Mail"
+         title="Send mission report email"
+         description="Send an email with mission report contents and
+         file attachments on the triggering object"
+         for="*"
+         event="zope.component.interfaces.IObjectEvent"
+         addview="ilo.mailreport.actions.Mail"
+         editview="edit"
+         schema=".mail.IMailAction"
+         factory=".mail.MailAction"
+         />
+
+</configure>
